@@ -9,6 +9,18 @@ async function handleFormSubmit(event) {
     password: form.password.value,
   };
 
-  const response = await axios.post('http://localhost:3000/api/auth/signup', body);
-  window.alert(response.data);
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/auth/signup",
+      body
+    );
+
+    if ("error" in response.data) {
+      window.alert(response.data.error);
+    } else {
+      console.log(response.data);
+    }
+  } catch (err) {
+    console.error(err);
+  }
 }

@@ -1,3 +1,5 @@
+const User = require("../models/User.js");
+
 module.exports.signUp = async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -6,10 +8,15 @@ module.exports.signUp = async (req, res) => {
       return res.send({ error: "Cannot process empty fields" });
     }
 
-    console.log(username, email, password);
-    return res.send(`Signed up ${username}`);
+    const user = await User.create({ username, email, password });
+
+    res.status(201).json({
+      message: "Signed up successfully",
+      user,
+    });
   } catch (error) {
-    console.error(error);
+    if ((error.name = "SequelizeUniqueConstraintError"))
+      return res.json({ error: "User already exists" });
     return res.send({ error: "Something went wrong" });
   }
 };

@@ -1,6 +1,17 @@
 const express = require("express");
 const cors = require("cors");
 const authRouter = require("./routes/auth.js");
+const sequelize = require("./config/dbInit.js");
+
+(async() => {
+    try{
+        await sequelize.authenticate();
+        await sequelize.sync();
+    } catch(err){
+        console.log(err);
+        return;
+    }
+})();
 
 const app = express();
 

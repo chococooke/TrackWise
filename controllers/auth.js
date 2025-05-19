@@ -1,4 +1,5 @@
 const User = require("../models/User.js");
+const { hash, compare } = require("bcrypt");
 
 module.exports.signUp = async (req, res) => {
   try {
@@ -8,7 +9,9 @@ module.exports.signUp = async (req, res) => {
       return res.send({ error: "Cannot process empty fields" });
     }
 
-    const user = await User.create({ username, email, password });
+    const pwdHash = await hash(password, 10);
+
+    const user = await User.create({ username, email, password: pwdHash });
 
     res.status(201).json({
       message: "Signed up successfully",
@@ -32,11 +35,11 @@ module.exports.logIn = async (req, res) => {
     });
 
     if (user) {
-      if (user.password === password) {
+      const match = await compare(password, user.password);
+      if (match) {
         return res.status(200).json({ user, message: "Login succesfull" });
       } else {
         return res.status(403).json({ error: "wrong credentials" });
-        
       }
     } else {
       return res.status(404).json({ error: "User not found" });

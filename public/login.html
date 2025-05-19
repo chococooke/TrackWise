@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TrackWise - Sign Up</title>
+    <title>TrackWise - Log In</title>
     <link rel="stylesheet" href="/style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
   </head>
@@ -13,8 +13,7 @@
         <h1 class="app-name">TrackWise</h1>
         <p class="tagline">Your Simple Expense Tracker</p>
       </div>
-      <form id="signup-form" onsubmit="handleFormSubmit(event)">
-        <input type="text" name="username" placeholder="Name" required />
+      <form id="login-form" onsubmit="handleFormSubmit(event)">
         <input type="email" name="email" placeholder="E-mail" required />
         <input
           type="password"
@@ -22,9 +21,10 @@
           placeholder="Password"
           required
         />
-        <button type="submit">Sign Up</button>
+        <button type="submit">Log In</button>
+        <small>new user? Sign up <a href="http://localhost:3000/api/auth/signup">here</a></small>
       </form>
     </div>
   </body>
-  <script src="/scripts/signup.js"></script>
+  <script src="/scripts/login.js"></script>
 </html>

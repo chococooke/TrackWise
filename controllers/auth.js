@@ -20,3 +20,29 @@ module.exports.signUp = async (req, res) => {
     return res.send({ error: "Something went wrong" });
   }
 };
+
+module.exports.logIn = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    console.log(req.body);
+    const user = await User.findOne({
+      where: {
+        email: email,
+      },
+    });
+
+    if (user) {
+      if (user.password === password) {
+        return res.status(200).json({ user, message: "Login succesfull" });
+      } else {
+        return res.status(403).json({ error: "wrong credentials" });
+        
+      }
+    } else {
+      return res.status(404).json({ error: "User not found" });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Internal server error" });
+  }
+};

@@ -21,8 +21,16 @@ app.use('/api/auth', authRouter);
 
 app.use(express.static("public"));
 
-app.get("/api/signup", (req, res) => {
+app.get("/", (req, res) => [
+    res.sendFile(__dirname + "/public/index.html")
+])
+
+app.get("/auth/signup", (req, res) => {
   res.sendFile(__dirname + "/public/signup.html");
 });
+
+app.get("/auth/login", (req, res) => {
+    res.sendFile(__dirname + "/public/login.html")
+})
 
 app.listen(3000, () => console.log("Server started on port 3000"));

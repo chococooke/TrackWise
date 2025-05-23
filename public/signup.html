@@ -6,14 +6,20 @@
     <title>TrackWise - Sign Up</title>
     <link rel="stylesheet" href="/style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="container">
-      <div class="branding">
-        <h1 class="app-name">TrackWise</h1>
-        <p class="tagline">Your Simple Expense Tracker</p>
-      </div>
-      <form id="signup-form" onsubmit="handleFormSubmit(event)">
+      <form id="auth-form" onsubmit="handleFormSubmit(event)">
+        <div class="auth-form-branding">
+          <h1 class="app-name">TrackWise</h1>
+          <p class="tagline">Your Simple Expense Tracker</p>
+        </div>
         <input type="text" name="username" placeholder="Name" required />
         <input type="email" name="email" placeholder="E-mail" required />
         <input
@@ -23,8 +29,13 @@
           required
         />
         <button type="submit">Sign Up</button>
+        <small
+          >Already a user?
+          <a href="http://localhost:5000/auth/login">Log in here</a></small
+        >
       </form>
     </div>
+    <footer class="auth-page-footer">dev: <a href="">chococooke</a></footer>
   </body>
   <script src="/scripts/signup.js"></script>
 </html>

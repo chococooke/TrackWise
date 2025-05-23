@@ -3,11 +3,283 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>TrackWise - Your Expense Tracker</title>
+    <style>
+      *,
+      *::after,
+      *::before {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: beige;
+        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+          "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      a {
+        text-decoration: none;
+        color: teal;
+        transition: color 0.3s ease;
+      }
+
+      a:hover {
+        color: #006666;
+      }
+
+      button {
+        padding: 0.6rem 1rem;
+        border-radius: 10px;
+        border: none;
+        font-weight: bolder;
+        background-color: #333;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        background-color: #222;
+      }
+
+      .header {
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.6rem 2rem;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        height: 10vh;
+        border-bottom: 1px solid lightgrey;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-branding h1 {
+        font-size: 1.75rem;
+        font-weight: bolder;
+        color: #218838;
+      }
+
+      .header-links ul {
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .main {
+        margin-top: 10vh;
+        min-height: calc(100vh - 15vh);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero {
+        height: 50vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .hero h1 {
+        font-size: 3rem;
+        font-weight: bolder;
+        color: #333;
+        margin-bottom: 1rem;
+      }
+
+      .hero p {
+        font-size: 1.25rem;
+        color: grey;
+        margin-bottom: 2rem;
+        max-width: 600px;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .hero-buttons button:first-child {
+        background-color: #218838;
+      }
+
+      .hero-buttons button:first-child:hover {
+        background-color: #1a6e2d;
+        transform: translateY(-2px);
+      }
+
+      .features {
+        padding: 2rem;
+        width: 100%;
+        max-width: 1200px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 2rem;
+      }
+
+      .feature-card {
+        background-color: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        width: 33.33%;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      .feature-card h3 {
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: #218838;
+        margin-bottom: 1rem;
+      }
+
+      .feature-card p {
+        font-size: 0.875rem;
+        color: #666;
+      }
+
+      footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 1rem;
+        font-weight: bold;
+        border-top: 1px solid lightgrey;
+        background-color: white;
+        /* height: 5vh; */
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2rem;
+        }
+
+        .hero p {
+          font-size: 1rem;
+        }
+
+        .features {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .feature-card {
+          width: 100%;
+          max-width: 400px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .header {
+          padding: 0.5rem 1rem;
+        }
+
+        .header-branding h1 {
+          font-size: 1.5rem;
+        }
+
+        .hero {
+          padding: 1rem;
+        }
+
+        .hero h1 {
+          font-size: 1.5rem;
+        }
+
+        .hero-buttons {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .hero-buttons button {
+          width: 100%;
+          max-width: 200px;
+        }
+      }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   </head>
   <body>
-    <h1>Home page</h1>
-    <button><a href="http://localhost:3000/auth/signup">Sign Up</a></button>
-    <button><a href="http://localhost:3000/auth/login">Log In</a></button>
+    <header class="header">
+      <div class="header-branding">
+        <h1>TrackWise</h1>
+      </div>
+      <nav class="header-links">
+        <ul>
+          <li><a href="http://localhost:5000/auth/login">Login</a></li>
+          <li><a href="http://localhost:5000/auth/signup">Signup</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main class="main">
+      <section class="hero">
+        <h1>Take Control of Your Finances</h1>
+        <p>
+          Track expenses, categorize spending, and stay on budget effortlessly
+          with TrackWise.
+        </p>
+        <div class="hero-buttons">
+          <button id="cta">Get Started</button>
+          <button>Learn More</button>
+        </div>
+      </section>
+      <section class="features">
+        <div class="feature-card">
+          <h3>Add Expenses</h3>
+          <p>
+            Quickly log your expenses with amounts, descriptions, and
+            categories.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>Categorize Spending</h3>
+          <p>
+            Organize expenses into categories like groceries, petrol, or
+            stationary.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>Track History</h3>
+          <p>
+            View your spending history to make informed financial decisions.
+          </p>
+        </div>
+      </section>
+    </main>
+    <footer>made with ❤️ by <a href="">chococooke</a></footer>
   </body>
+  <script>
+    const cta = document.getElementById("cta");
+    cta.addEventListener('click', (event) => {
+        window.location.href = "http://localhost:5000/auth/login"
+    })
+  </script>
 </html>

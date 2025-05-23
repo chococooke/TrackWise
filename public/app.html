@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="title"></title>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="header">
+      <div class="header-branding">
+        <h1>TrackWise</h1>
+      </div>
+      <div class="header-links">
+        <ul>
+          <li>
+            <div class="header-links-user" id="avatar">
+              <img
+                src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQApAMBIgACEQEDEQH/xAAbAAEBAQEBAQEBAAAAAAAAAAAAAQUCAwQGB//EADQQAAIBAwIDBgIJBQAAAAAAAAABAgMEESExBRJBUVJhcYGxEyIjJDI0QmKRwdEVM3Khov/EABUBAQEAAAAAAAAAAAAAAAAAAAAB/8QAFhEBAQEAAAAAAAAAAAAAAAAAABEB/9oADAMBAAIRAxEAPwD+uAAqAAAAAAAUCAFAgLuAIAAABGAIwQARggAgAHsAAAAAAAAeVzc07aKdR6vaPU4vbpW1PTDqS+yn7mFOcqk3Ocm5PdgfXX4lWqaU/o4+G58k5zm8znKXmzkCBts9T3pXVel9mpLybyjwAg17bicZtRrrkfeWxoJ5Wn+j8yfXYXroSVOq80n/AMgbTZBkgAjDIwBGCMBkhGUD6AAAAAANpJt7JZYPl4nP4dnJJ6yaQGPc13cVnUlttHyPIAoAAAAABNCnIGxwq4dSl8GW8NvI+0wuH1HTvKfZL5X6m6QGcgmQDI2Gc5AZBMgD6wAAAAAz+Nf2aS/M/Y0D4uLwzaqXdlkDFABQAAAAjAMgIB3RbVWD/Mvc/RPd+Z+ftI891Siu8b+SaDZyytnDYA5ZcnLAA5yAPvAAAAADitTValKm/wASwdgD8zKLhJwlo09UQ1eKWjl9YgtcfOv3MoYAYBRMkDIAZMg9KFGdeooQWr69EgPt4TRbnKs1ovlRps4o040acacNkupWQJM5yU5bAM5yMkewEyDnPgUDRAAAAAAABTMvOHc8nUt8c3c7fI0m1FZk0l1bPjq8RtoPHM5f4oDFnCVOXLUi4tdGjlm/Grb3UcJ06ng/4PKfDraWqi4+TFGIRtLqbP8ATLfrzvzZ6wtregsqnFY/FLp+ooybezq12njlh3mjWt6ELenyw9W92eVXiFvTljn5315dUj1pXNGsvo5qXhswO8kG25G9AIznJWzlgGzlsNnLYDIJuANQAAAAAPkvL+FunGKU6nZ2eZzxG8dBfDpP6SS37qMXOdddd32gele4q13mrNtd3ojxZSMoHcbivFfLWmvDmPMjA9pXdy96015M8ZTlN5nKUn4vIOWBckTw8p4faiMgH223EJ08RrZnDt6r+TThUjVgpQaae2D882etrcyt55WsX9pEG6zhsRnGcFKLymsojAjI2DlsACaADXAAA4r1FRpSqS2isnZm8aq4jCkur5mBmVKkqk5Tk3zSeWcMZIUCAACMEYA5ZSMCEbKzlgGzkpyBocLr4k6Mno9Y/uaDZgU5/DqRmt4vJu83MsrqskAgIwIUnqANkAADD4rLmvGu6kjbyYHEX9dqensB8zIUhQICACMEANkYIBGTIZGAZyynOQDZs2Uua1pt7pY/QxGbHD/ukPX3IPobwclZAAHqANojKAOTB4l98qegAHysAFHLIABCAARnLKAOWQACPY5IAD2Nbh/3SHr7lBB7kZQAQAA//9k="
+                alt="user avatar"
+              />
+              <p>name</p>
+            </div>
+          </li>
+          <li>
+            <button id="logout">Log Out</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main">
+      <form id="expense-form">
+        <h3>Add Your exepenses here</h3>
+        <input
+          type="number"
+          name="amount"
+          placeholder="Expense Amount"
+          required
+        />
+        <textarea id="description" rows="5" name="Description" placeholder="description"></textarea>
+        <label for="categories">categories</label>
+        <select class="expense-form-select" name="categories" id="categories" required>
+          <option value="Select">Select</option>
+          <option value="groceries">Groceries</option>
+          <option value="stationary">Stetionary</option>
+          <option value="travel">Travel</option>
+          <option value="fee">Fee</option>
+          <option value="recharge">Recharge</option>
+          <option value="gift">Gift</option>
+          <option value="donation">Donation</option>
+          <option value="holiday">holiday</option>
+        </select>
+        <div class="expense-form-buttons">
+          <button class="button" type="submit" style="background-color: #218838;">Add</button>
+          <button class="button" type="reset">Reset</button>
+        </div>
+      </form>
+      <div id="expenses">
+        <h3>Your expenses</h3>
+        <div id="expensesList">
+
+        </div>
+      </div>
+  </body>
+  <footer>
+    made with ❤️ by <a href="">chococooke</a>
+  </footer>
+  <script src="/scripts/index.js"></script>
+</html>

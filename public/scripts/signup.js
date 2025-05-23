@@ -2,7 +2,7 @@
 
 async function handleFormSubmit(event) {
   event.preventDefault();
-  const form = document.getElementById("signup-form");
+  const form = document.getElementById("auth-form");
   const body = {
     username: form.username.value,
     email: form.email.value,
@@ -11,7 +11,7 @@ async function handleFormSubmit(event) {
 
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/auth/signup",
+      "http://localhost:5000/api/auth/signup",
       body
     );
 
@@ -19,6 +19,8 @@ async function handleFormSubmit(event) {
       window.alert(response.data.error);
     } else {
       console.log(response.data);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      window.location.href = "http://localhost:5000/app";
     }
   } catch (err) {
     console.error(err);

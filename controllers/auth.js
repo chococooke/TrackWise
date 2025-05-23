@@ -1,4 +1,4 @@
-const User = require("../models/User.js");
+const { User } = require("../models/index.js");
 const { hash, compare } = require("bcrypt");
 
 module.exports.signUp = async (req, res) => {
@@ -27,7 +27,6 @@ module.exports.signUp = async (req, res) => {
 module.exports.logIn = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body);
     const user = await User.findOne({
       where: {
         email: email,

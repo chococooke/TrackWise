@@ -53,8 +53,21 @@ body {
   align-items: center;
 }
 
+.premium-cta-wrapper {
+  padding: 0.2rem;
+  border-radius: 10px;
+  background-image: linear-gradient(to bottom right, pink, yellow, turquoise);
+  margin: 0 0.6rem;
+  transition: all 0.3s ease;
+}
+
+.premium-cta-wrapper:hover {
+  box-shadow: 0 0 10px turquoise;
+  transform: translateY(-4px);
+}
+
 #avatar {
-  margin: 1rem;
+  margin: 0 0.4rem;
   border: 1px solid white;
   border-radius: 10px;
   display: flex;
@@ -77,6 +90,9 @@ body {
 }
 
 /* main */
+.hero-main {
+  background-image: url("assets/hero.jpg");
+}
 .main {
   height: 80vh;
   width: 100vw;
@@ -91,7 +107,7 @@ body {
 #expense-form {
   margin: 0 auto;
   padding: 1rem;
-  width: 37%;
+  width: 24%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -151,66 +167,178 @@ input:active {
 #expenses {
   margin: 0 auto;
   background-color: white;
-  width: 58%;
+  width: 75%;
   height: 100%;
   overflow-y: scroll;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 10px;
   box-shadow: 2px 2px 10px lightgrey;
 }
 
-.loader {
-  font-weight: bolder;
-  font-size: 24px;
-  text-align: center;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.expense-card {
-  margin: 20px;
-  border: 1px solid white;
-  border-radius: 10px;
-  border: 2px solid lightgrey;
+.expenses-tabs {
+  margin: 1rem;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
-  height: 3.6rem;
+  justify-content: space-between;
+}
+
+.expenses-tabs > * {
+  width: 49%;
+}
+
+#tab-expenses,
+#tab-leaderboard {
   background-color: lightgrey;
-  /* box-shadow: 2px 2px 10px lightgrey; */
+  color: gray;
+  transition: none;
 }
 
-.expense-card > h3 {
-  background-color: white;
-  height: 100%;
-  width: 33.31%;
+#tab-expenses:hover,
+#tab-leaderboard:hover {
+  transform: none;
 }
 
-.expense-card > h3 > span {
-  color: grey;
+#tab-expenses-active,
+#tab-leaderboard-avtive {
+  background-color: #333;
+  color: white;
 }
 
-.expense-card > p {
-  width: 33.31%;
-  background-color: white;
-  height: 100%;
-  overflow-y: scroll;
+#tab-expenses-active:hover,
+#tab-leaderboard-active:hover {
+  transform: none;
 }
 
-.expense-card > small {
-  height: 100%;
-  width: 33.31%;
-  background-color: white;
-}
-.expense-card > * {
-  text-align: left;
+/* Previous style.css content omitted, replace .expense-card and add new rules */
+
+.expense-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem;
   padding: 1rem;
+  border: 1px solid #e0e0e0;
   border-radius: 10px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.expense-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.expense-amount {
+  flex: 0 0 25%;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+.expense-amount .currency {
+  color: #218838;
+  margin-right: 0.25rem;
+}
+
+.expense-description {
+  flex: 0 0 35%;
+  font-size: 0.875rem;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.expense-category {
+  flex: 0 0 20%;
+  font-size: 0.75rem;
+  color: #999;
+  text-transform: capitalize;
+}
+
+.expense-actions {
+  flex: 0 0 20%;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.action-button {
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-button {
+  background-color: #218838;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #1a6e2d;
+  transform: translateY(-2px);
+}
+
+.delete-button {
+  background-color: #d32f2f;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #b71c1c;
+  transform: translateY(-2px);
+}
+
+.empty-state,
+.error-state {
+  text-align: center;
+  font-size: 1rem;
+  color: #666;
+  padding: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .expense-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .expense-amount,
+  .expense-description,
+  .expense-category,
+  .expense-actions {
+    flex: 0 0 100%;
+  }
+
+  .expense-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .expense-card {
+    margin: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .expense-amount {
+    font-size: 1rem;
+  }
+
+  .expense-description {
+    font-size: 0.75rem;
+  }
 }
 
 footer {
@@ -306,13 +434,97 @@ footer {
   font-size: 56px;
 }
 
-.auth-form-branding > p{
+.auth-form-branding > p {
   opacity: 0.5;
 }
 
-
-.auth-page-footer{
+.auth-page-footer {
   background-color: transparent;
   border: none;
   text-shadow: 0 0 4px lightgrey;
+}
+
+/* Leaderboard styling */
+#ldBoardDiv {
+  background-color: white;
+  width: 100%;
+  max-width: 800px;
+  margin: 1rem auto;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+#ldBoardDiv h3 {
+  font-size: 1.5rem;
+  font-weight: bolder;
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.leaderboard-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fafafa;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.leaderboard-entry:hover {
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.leaderboard-entry .rank {
+  font-weight: bold;
+  color: #218838;
+  width: 10%;
+}
+
+.leaderboard-entry .username {
+  font-weight: 500;
+  color: #333;
+  flex: 1;
+  text-align: left;
+}
+
+.leaderboard-entry .expense {
+  font-weight: 500;
+  color: #666;
+  width: 20%;
+  text-align: right;
+}
+
+.leaderboard-entry.rank-1 {
+  background-color: #fff8e1;
+  border-color: #ffc107;
+}
+
+.leaderboard-entry.rank-1 .rank {
+  color: #ffc107;
+}
+
+.leaderboard-entry.rank-2 {
+  background-color: #f5f5f5;
+  border-color: #bdbdbd;
+}
+
+.leaderboard-entry.rank-2 .rank {
+  color: #bdbdbd;
+}
+
+.leaderboard-entry.rank-3 {
+  background-color: #f7f4f0;
+  border-color: #d7ccc8;
+}
+
+.leaderboard-entry.rank-3 .rank {
+  color: #d7ccc8;
 }

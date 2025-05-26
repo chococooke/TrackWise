@@ -1,5 +1,5 @@
 const { Sequelize } = require("sequelize");
-const {config} = require("dotenv");
+const { config } = require("dotenv");
 
 config();
 
@@ -10,6 +10,7 @@ const sequelize = new Sequelize(
   {
     host: "localhost",
     dialect: "mysql",
+    logging: false,
   }
 );
 

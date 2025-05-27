@@ -1,44 +1,28 @@
 const { User, Expense } = require("../models/index.js");
 
-const getleaderBoard = async (req, res) => {
-  const leaderboard = [];
+async function getleaderBoard(req, res) {
   try {
+    let leaderboard = [];
     const users = await User.findAll({
-      limit: 15,
+      logging: false,
+      attributes: ["username"],
+      include: [{ model: Expense, attributes: ["amount"] }],
     });
 
-    if (users.length === 0) {
-      return res.status(200).json({});
-    }
-
-    for (const user of users) {
-      try {
-        const expenses = await Expense.findAll({
-          where: {
-            UserId: user.id,
-          },
-        });
-
-        const totalExpense = expenses.reduce(
-          (sum, expense) => sum + expense.amount,
-          0
-        );
-
-        leaderboard.push({ username: user.username, exp: totalExpense });
-      } catch (err) {
-        console.error(
-          `Error processing expenses for user ${user.username}:`,
-          err
-        );
-        leaderboard[user.username] = 0; // Default to 0 for failed users
-      }
-    }
-
-    return res.status(200).json(leaderboard);
+    users.forEach((user) => {
+      let totalExpense = 0;
+      user.Expenses.forEach((exp) => {
+        totalExpense += exp.dataValues.amount;
+      });
+      leaderboard.push({
+        username: user.dataValues.username,
+        exp: totalExpense,
+      });
+    });
+    res.status(200).json(leaderboard);
   } catch (err) {
-    console.error("Leaderboard error:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log(err);
+    return res.status();
   }
-};
-
+}
 module.exports = { getleaderBoard };

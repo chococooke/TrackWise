@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const authRouter = require("./routes/auth.js");
 const expenseRouter = require("./routes/expense.js");
-const paymentRouter = require("./routes/payment.js");
 const userRouter = require("./routes/user.js");
 const sequelize = require("./config/dbInit.js");
 const dotenv = require("dotenv");
@@ -26,7 +25,6 @@ app.use(cors({ origin: "*" }));
 app.use("/api/auth", authRouter);
 app.use("/exp", expenseRouter);
 app.use("/users", userRouter);
-app.use("/payment", paymentRouter);
 
 app.use(express.static("public"));
 

@@ -28,4 +28,19 @@ const getExpensesForUser = async (req, res) => {
   }
 };
 
-module.exports = { addExpense, getExpensesForUser };
+const deleteExpense = async (req, res) => {
+  try {
+    await Expense.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    res.json({ success: "expense deleted successfully" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: "internal server error" });
+  }
+};
+
+module.exports = { addExpense, getExpensesForUser, deleteExpense };

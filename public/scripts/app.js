@@ -82,9 +82,7 @@ expenseForm.addEventListener("submit", async (event) => {
     };
     await axios.post("http://localhost:5000/exp", formData);
 
-    amount = 0;
-    description = "";
-    category = "";
+    expenseForm.reset();
 
     await getUserExpenses();
     await renderExpenses();
@@ -136,9 +134,23 @@ async function renderExpenses() {
       const deleteButton = document.createElement("button");
       deleteButton.className = "action-button delete-button";
       deleteButton.innerText = "Delete";
-      deleteButton.addEventListener("click", () =>
-        console.log(`Delete expense ${expense.id || index}`)
-      );
+      deleteButton.addEventListener("click", async (event) => {
+        try {
+          const response = await axios.delete(
+            `http://localhost:5000/exp/delete/${expense.id}`
+          );
+
+          if (!response.data.success) {
+            window.alert("Error while deleting expense");
+          }
+
+          await getUserExpenses();
+          await renderExpenses();
+        } catch (err) {
+          console.error(err);
+          window.alert("Error while deleting expense");
+        }
+      });
 
       actions.appendChild(editButton);
       actions.appendChild(deleteButton);

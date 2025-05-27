@@ -13,9 +13,16 @@ module.exports.signUp = async (req, res) => {
 
     const user = await User.create({ username, email, password: pwdHash });
 
+    const currentUser = {
+      id: user.id,
+      username: username,
+      email: email,
+      premium: user.premium,
+    };
+
     res.status(201).json({
       message: "Signed up successfully",
-      user,
+      user: currentUser,
     });
   } catch (error) {
     if ((error.name = "SequelizeUniqueConstraintError"))
@@ -36,7 +43,18 @@ module.exports.logIn = async (req, res) => {
     if (user) {
       const match = await compare(password, user.password);
       if (match) {
-        return res.status(200).json({ user, message: "Login succesfull" });
+        const currentUser = {
+          id: user.id,
+          username: user.username,
+          email: email,
+          premium: user.premium,
+        };
+
+        console.log(currentUser);
+
+        return res
+          .status(200)
+          .json({ user: currentUser, message: "Login succesfull" });
       } else {
         return res.status(403).json({ error: "wrong credentials" });
       }

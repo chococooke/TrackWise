@@ -1,4 +1,5 @@
 let user = null;
+const premiumCta = document.getElementById("premium-cta-button");
 const expenseForm = document.getElementById("expense-form");
 const logoutButton = document.getElementById("logout");
 const expensesDiv = document.getElementById("expensesList");
@@ -26,10 +27,18 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     alert("You need to log in first.");
     window.location.href = "http://localhost:5000/auth/login";
   }
+
   user = JSON.parse(rawUser);
   title.innerHTML = `TrackWise - ${user.username}`;
   const userAvatar = document.getElementById("avatar");
   userAvatar.querySelector("p").innerHTML = user.username;
+
+  if (user.premium === false) {
+    viewLeaderboard.style.display = "none";
+    ldBoardDiv.style.display = "none";
+  } else {
+    document.getElementById("premium-cta-wrapper").style.display = "none";
+  }
 
   const leaderboard = (
     await axios.get("http://localhost:5000/users/leaderboard")
@@ -84,127 +93,77 @@ expenseForm.addEventListener("submit", async (event) => {
   }
 });
 
-// render all expenses of the current user.
-// async function renderExpenses() {
-//   try {
-//     const expenseList = JSON.parse(localStorage.getItem("expenseList"));
-//     expensesDiv.innerHTML = "";
-
-//     expenseList.forEach((expense) => {
-//       const exp = document.createElement("div");
-//       const expAmount = document.createElement("h3");
-//       const expDescription = document.createElement("p");
-//       const expCategory = document.createElement("small");
-
-//       expAmount.innerHTML = `<span>$</span> ${expense.amount}`;
-//       expDescription.innerText = expense.description;
-//       expCategory.innerText = expense.category;
-
-//       exp.className = "expense-card";
-//       exp.appendChild(expAmount);
-//       exp.appendChild(expDescription);
-//       exp.appendChild(expCategory);
-//       expensesDiv.appendChild(exp);
-//     });
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
-
 async function renderExpenses() {
   try {
-    // Parse expense list from localStorage with fallback
     const expenseList = JSON.parse(localStorage.getItem("expenseList")) || [];
 
-    // Clear existing content
     expensesDiv.innerHTML = "";
 
-    // Handle empty state
     if (!Array.isArray(expenseList) || expenseList.length === 0) {
       expensesDiv.innerHTML = '<p class="empty-state">No expenses yet.</p>';
       return;
     }
 
-    // Render each expense
     expenseList.forEach((expense, index) => {
-      // Create expense card container
       const expenseCard = document.createElement("div");
       expenseCard.className = "expense-card";
       expenseCard.dataset.id = expense.id || index; // Add data-id for future interactions
 
-      // Create amount element
       const amount = document.createElement("h3");
       amount.className = "expense-amount";
-      amount.innerHTML = `<span class="currency">₹</span>${Number(expense.amount).toFixed(2)}`;
+      amount.innerHTML = `<span class="currency">₹</span>${Number(
+        expense.amount
+      ).toFixed(2)}`;
 
-      // Create description element
       const description = document.createElement("p");
       description.className = "expense-description";
       description.innerText = expense.description || "No description";
 
-      // Create category element
       const category = document.createElement("small");
       category.className = "expense-category";
       category.innerText = expense.category || "Uncategorized";
 
-      // Create action buttons (optional, consistent with prior script.js)
       const actions = document.createElement("div");
       actions.className = "expense-actions";
 
       const editButton = document.createElement("button");
       editButton.className = "action-button edit-button";
       editButton.innerText = "Edit";
-      // Placeholder for edit functionality
-      editButton.addEventListener("click", () => console.log(`Edit expense ${expense.id || index}`));
+      editButton.addEventListener("click", () =>
+        console.log(`Edit expense ${expense.id || index}`)
+      );
 
       const deleteButton = document.createElement("button");
       deleteButton.className = "action-button delete-button";
       deleteButton.innerText = "Delete";
-      // Placeholder for delete functionality
-      deleteButton.addEventListener("click", () => console.log(`Delete expense ${expense.id || index}`));
+      deleteButton.addEventListener("click", () =>
+        console.log(`Delete expense ${expense.id || index}`)
+      );
 
       actions.appendChild(editButton);
       actions.appendChild(deleteButton);
 
-      // Append elements to card
       expenseCard.appendChild(amount);
       expenseCard.appendChild(description);
       expenseCard.appendChild(category);
       expenseCard.appendChild(actions);
 
-      // Append card to container
       expensesDiv.appendChild(expenseCard);
     });
   } catch (err) {
     console.error("Render expenses error:", err);
-    expensesDiv.innerHTML = '<p class="error-state">Error loading expenses.</p>';
+    expensesDiv.innerHTML =
+      '<p class="error-state">Error loading expenses.</p>';
   }
 }
 
-// load leaderboard
-// function renderLeaderBoard() {
-//   try {
-//     let ldboard = JSON.parse(localStorage.getItem("ldboard"));
-
-//     ldboard = ldboard.sort((a, b) => a.exp - b.exp);
-
-//     ldboard.forEach((entry, index) => {
-//       const h5 = document.createElement("h5");
-//       h5.innerText = `${index + 1}-${entry.username}-${entry.exp}`;
-//       ldBoardDiv.appendChild(h5);
-//     });
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
-
 // -------------------------------------------------------------------
 // -------------------------------------------------------------------
+
 async function renderLeaderboard() {
   try {
     let ldboard = JSON.parse(localStorage.getItem("ldboard")) || [];
 
-    // Ensure ldboard is an array of objects
     if (!Array.isArray(ldboard)) {
       ldboard = Object.entries(ldboard).map(([username, exp]) => ({
         username,
@@ -212,10 +171,8 @@ async function renderLeaderboard() {
       }));
     }
 
-    // Sort by expense in descending order (highest first)
     ldboard.sort((a, b) => b.exp - a.exp);
 
-    // Clear existing content
     ldBoardDiv.innerHTML = "<h3>Leaderboard</h3>";
 
     if (ldboard.length === 0) {
@@ -250,6 +207,39 @@ async function renderLeaderboard() {
     ldBoardDiv.innerHTML = "<p>Error loading leaderboard.</p>";
   }
 }
+
+// Payment
+const cashFree = Cashfree({ mode: "sandbox" });
+
+premiumCta.addEventListener("click", async (event) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:5000/api/payment/create-order`,
+      {
+        amount: 100.5,
+        name: user.username,
+        email: user.email,
+      }
+    );
+
+    console.log(response);
+
+    if (!response.data.success) {
+      alert("Failed to create order");
+      return;
+    }
+
+    const checkoutOptions = {
+      paymentSessionId: response.data.payment_session_id,
+      redirectTarget: `_self`,
+    };
+
+    cashFree.checkout(checkoutOptions);
+  } catch (err) {
+    console.error(`Error:`, err);
+    alert(`Payment initiation failed`);
+  }
+});
 
 // Log out.
 async function logOut(event) {

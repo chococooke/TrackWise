@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Status</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+  </head>
+  <body>
+    <h1>Payment Status</h1>
+    <p id="status">Checking...</p>
+  </body>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get("order_id");
+    const userId = JSON.parse(localStorage.getItem("user")).id;
+
+    async function checkPaymentStatus() {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/payment/verify-payment",
+          { order_id: orderId, userId }
+        );
+
+        const data = response.data;
+        console.log(data);
+        document.getElementById(
+          "status"
+        ).textContent = `Payment Status ${data.status}`;
+
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        window.location.href = data.redirect;
+      } catch (err) {
+        console.error(`Error:`, err);
+        document.getElementById(
+          "status"
+        ).textContent = `Error checking payment status`;
+      }
+    }
+
+    checkPaymentStatus();
+  </script>
+</html>

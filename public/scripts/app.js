@@ -1,4 +1,5 @@
 let user = null;
+let twToken = null;
 const premiumCta = document.getElementById("premium-cta-button");
 const expenseForm = document.getElementById("expense-form");
 const logoutButton = document.getElementById("logout");
@@ -22,13 +23,15 @@ viewLeaderboard.addEventListener("click", (event) => {
 document.addEventListener("DOMContentLoaded", async (event) => {
   ldBoardDiv.style.display = "none";
   const title = document.getElementById("title");
-  const rawUser = localStorage.getItem("user");
-  if (!rawUser) {
+  const rawUser = await localStorage.getItem("user");
+
+  if (!rawUser && !twToken) {
     alert("You need to log in first.");
     window.location.href = "http://localhost:5000/auth/login";
   }
 
-  user = JSON.parse(rawUser);
+  user = await JSON.parse(rawUser);
+  twToken = user.twToken;
   title.innerHTML = `TrackWise - ${user.username}`;
   const userAvatar = document.getElementById("avatar");
   userAvatar.querySelector("p").innerHTML = user.username;
@@ -39,12 +42,15 @@ document.addEventListener("DOMContentLoaded", async (event) => {
   } else {
     document.getElementById("premium-cta-wrapper").style.display = "none";
   }
-
   const leaderboard = (
-    await axios.get("http://localhost:5000/users/leaderboard")
+    await axios.get("http://localhost:5000/users/leaderboard", {
+      headers: {
+        Authorization: `Bearer ${twToken}`,
+        "Content-Type": "application/json",
+      },
+    })
   ).data;
 
-  console.log(leaderboard);
 
   localStorage.setItem("ldboard", JSON.stringify(leaderboard));
 
@@ -56,8 +62,14 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 // get current users's expenses
 async function getUserExpenses() {
   try {
-    const expenses = (await axios.get(`http://localhost:5000/exp/${user.id}`))
-      .data.exp;
+    const expenses = (
+      await axios.get(`http://localhost:5000/exp/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${twToken}`,
+          "Content-Type": "application/json",
+        },
+      })
+    ).data.exp;
     localStorage.setItem("expenseList", JSON.stringify(expenses));
   } catch (err) {
     console.err(err);
@@ -80,7 +92,12 @@ expenseForm.addEventListener("submit", async (event) => {
       description,
       category,
     };
-    await axios.post("http://localhost:5000/exp", formData);
+    await axios.post("http://localhost:5000/exp", formData, {
+      headers: {
+        Authorization: `Bearer ${twToken}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     expenseForm.reset();
 
@@ -137,7 +154,13 @@ async function renderExpenses() {
       deleteButton.addEventListener("click", async (event) => {
         try {
           const response = await axios.delete(
-            `http://localhost:5000/exp/delete/${expense.id}`
+            `http://localhost:5000/exp/delete/${expense.id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${twToken}`,
+                "Content-Type": "application/json",
+              },
+            }
           );
 
           if (!response.data.success) {
@@ -231,10 +254,14 @@ premiumCta.addEventListener("click", async (event) => {
         amount: 100.5,
         name: user.username,
         email: user.email,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${twToken}`,
+          "Content-Type": "application/json",
+        },
       }
     );
-
-    console.log(response);
 
     if (!response.data.success) {
       alert("Failed to create order");
@@ -257,6 +284,7 @@ premiumCta.addEventListener("click", async (event) => {
 async function logOut(event) {
   await localStorage.removeItem("user");
   await localStorage.removeItem("expenseList");
+  await localStorage.removeItem("ldboard");
   window.location.href = "http://localhost:5000/auth/login";
 }
 

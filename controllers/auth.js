@@ -2,6 +2,7 @@ const { User } = require("../models/index.js");
 const { hash, compare } = require("bcrypt");
 const transporter = require("../config/config.mail.js");
 const { createResetLink, resetPassword } = require("../utils/reset-pass.js");
+const { sign } = require("../utils/jwt.js");
 
 module.exports.signUp = async (req, res) => {
   try {
@@ -13,13 +14,30 @@ module.exports.signUp = async (req, res) => {
 
     const pwdHash = await hash(password, 10);
 
-    const user = await User.create({ username, email, password: pwdHash });
+    const jwTokenData = await sign({
+      username,
+      email,
+      time: Date.now(),
+    });
+
+    if (jwTokenData.error) {
+      return res.json({ error: "Something went wrong" });
+    }
+
+    const user = await User.create({
+      username,
+      email,
+      password: pwdHash,
+      sessionToken: jwTokenData.token,
+      sessionTokenExpires: Date.now() + 259200000,
+    });
 
     const currentUser = {
       id: user.id,
       username: username,
       email: email,
       premium: user.premium,
+      twToken: user.sessionToken,
     };
 
     res.status(201).json({
@@ -27,6 +45,7 @@ module.exports.signUp = async (req, res) => {
       user: currentUser,
     });
   } catch (error) {
+    console.log(error);
     if ((error.name = "SequelizeUniqueConstraintError"))
       return res.json({ error: "User already exists" });
     return res.send({ error: "Something went wrong" });
@@ -50,13 +69,13 @@ module.exports.logIn = async (req, res) => {
           username: user.username,
           email: email,
           premium: user.premium,
+          twToken: user.sessionToken,
         };
 
-        console.log(currentUser);
-
-        return res
-          .status(200)
-          .json({ user: currentUser, message: "Login succesfull" });
+        res.status(201).json({
+          message: "Signed up successfully",
+          user: currentUser,
+        });
       } else {
         return res.status(403).json({ error: "wrong credentials" });
       }
@@ -81,6 +100,7 @@ module.exports.initResetPassword = async (req, res) => {
 
     const mailOptions = {
       from: "pro.bhimsen@gmail.com",
+      subject: "Link for resetting your TrackWise account password",
       to: email,
       text: `Link for resetting you TrackWise password`,
       html: `<p>follow <a href="${resetLink.link}">this link</a>to reset your password</p>`,

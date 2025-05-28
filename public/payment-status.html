@@ -6,6 +6,7 @@
     <title>Payment Status</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
   </head>
+
   <body>
     <h1>Payment Status</h1>
     <p id="status">Checking...</p>
@@ -13,13 +14,25 @@
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const orderId = urlParams.get("order_id");
-    const userId = JSON.parse(localStorage.getItem("user")).id;
+    let twToken = null;
+    let userId = null;
 
     async function checkPaymentStatus() {
+      const user = await JSON.parse(localStorage.getItem("user"));
+      console.log(user);
+      userId = user.id;
+      twToken = user.twToken;
+      console.log(twToken);
       try {
         const response = await axios.post(
           "http://localhost:5000/api/payment/verify-payment",
-          { order_id: orderId, userId }
+          { order_id: orderId, userId },
+          {
+            headers: {
+              "Authorization": `Bearer ${twToken}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
 
         const data = response.data;

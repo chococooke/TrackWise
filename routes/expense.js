@@ -1,4 +1,6 @@
 const express = require("express");
+const { isLoggedIn } = require("../middlewares/auth/loginMiddleware.js");
+
 const {
   addExpense,
   getExpensesForUser,
@@ -6,7 +8,7 @@ const {
 } = require("../controllers/expense");
 const router = express.Router();
 
-router.post("/", addExpense);
-router.get("/:id", getExpensesForUser);
-router.delete("/delete/:id", deleteExpense);
+router.post("/", isLoggedIn, addExpense);
+router.get("/:id", isLoggedIn, getExpensesForUser);
+router.delete("/delete/:id", isLoggedIn, deleteExpense);
 module.exports = router;

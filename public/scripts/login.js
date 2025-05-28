@@ -15,8 +15,8 @@ async function handleFormSubmit(event) {
     if ("error" in response.data) {
       window.alert(response.data.error);
     } else {
-      console.log(response.data)
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      console.log(response.data);
+      await localStorage.setItem("user", JSON.stringify(response.data.user));
       window.location.href = "http://localhost:5000/app";
     }
   } catch (err) {

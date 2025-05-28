@@ -15,6 +15,7 @@ dotenv.config();
     await sequelize.sync();
     console.log("[+] MySQL connected");
   } catch (err) {
+    console.log(err);
     return;
   }
 })();
@@ -23,7 +24,14 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: "*" }));
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use("/api/auth", authRouter);
 app.use("/exp", expenseRouter);
 app.use("/users", userRouter);

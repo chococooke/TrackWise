@@ -15,11 +15,12 @@ async function handleFormSubmit(event) {
       body
     );
 
+    console.log(response);
+
     if ("error" in response.data) {
       window.alert(response.data.error);
     } else {
-      console.log(response.data);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      await localStorage.setItem("user", JSON.stringify(response.data.user));
       window.location.href = "http://localhost:5000/app";
     }
   } catch (err) {

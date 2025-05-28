@@ -1,3 +1,4 @@
+const { isErrored } = require("nodemailer/lib/xoauth2/index.js");
 const cashfree = require("../config/config.payment.js");
 const { User } = require("../models/index.js");
 
@@ -36,12 +37,20 @@ async function verifyPayment(req, res) {
     const response = await cashfree.PGFetchOrder(order_id);
     const paymentStatus = response.data.order_status;
 
-    const currentUser = await User.findByPk(userId, {
-      attributes: ['username', 'email', 'premium', 'id']
+    const user = await User.findByPk(userId, {
+      attributes: ["username", "email", "premium", "id", "sessionToken"],
     });
-    
-    currentUser.premium = true;
-    await currentUser.save();
+
+    user.premium = true;
+    await user.save();
+
+    const currentUser = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      premium: user.premium,
+      twToken: user.sessionToken,
+    };
 
     res.json({
       success: true,

@@ -1,5 +1,7 @@
 const { User } = require("../models/index.js");
 const { hash, compare } = require("bcrypt");
+const transporter = require("../config/config.mail.js");
+const { createResetLink, resetPassword } = require("../utils/reset-pass.js");
 
 module.exports.signUp = async (req, res) => {
   try {
@@ -64,5 +66,46 @@ module.exports.logIn = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.json({ error: "Internal server error" });
+  }
+};
+
+module.exports.initResetPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const resetLink = await createResetLink(email);
+    console.log(resetLink);
+    if (resetLink.error) {
+      console.log(error);
+      res.status(404).json(resetLink);
+    }
+
+    const mailOptions = {
+      from: "pro.bhimsen@gmail.com",
+      to: email,
+      text: `Link for resetting you TrackWise password`,
+      html: `<p>follow <a href="${resetLink.link}">this link</a>to reset your password</p>`,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    res.send("A mail has been sent");
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.resetPassword = async (req, res) => {
+  try {
+    const { token, id, password } = req.body;
+
+    const result = await resetPassword(token, id, password);
+
+    if (result.error) {
+      console.log(result);
+      return res.status(403).json({ error: result.error });
+    }
+
+    res.status(200).json({ result });
+  } catch (err) {
+    console.log(err);
   }
 };

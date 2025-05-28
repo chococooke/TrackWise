@@ -32,23 +32,31 @@ app.use("/api/payment", paymentRouter);
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public");
+  res.sendFile(`${__dirname}/public`);
 });
 
 app.get("/app", (req, res) => {
-  res.sendFile(__dirname + "/public/app.html");
+  res.sendFile(`${__dirname}/public/app.html`);
 });
 
 app.get("/auth/signup", (req, res) => {
-  res.sendFile(__dirname + "/public/signup.html");
+  res.sendFile(`${__dirname}/public/signup.html`);
 });
 
 app.get("/auth/login", (req, res) => {
-  res.sendFile(__dirname + "/public/login.html");
+  res.sendFile(`${__dirname}/public/login.html`);
+});
+
+app.get("/auth/init-reset-password", (req, res) => {
+  res.sendFile(`${__dirname}/public/init-reset-password.html`);
+});
+
+app.get("/auth/reset-password", (req, res) => {
+  res.sendFile(`${__dirname}/public/reset-password.html`);
 });
 
 app.get("/payment-status", (req, res) => {
-  res.sendFile(__dirname + "/public/payment-status.html");
+  res.sendFile(`${__dirname}/public/payment-status.html`);
 });
 
 app.listen(process.env.PORT || 5000, () =>

@@ -19,10 +19,8 @@
 
     async function checkPaymentStatus() {
       const user = await JSON.parse(localStorage.getItem("user"));
-      console.log(user);
       userId = user.id;
       twToken = user.twToken;
-      console.log(twToken);
       try {
         const response = await axios.post(
           "http://localhost:5000/api/payment/verify-payment",
@@ -36,7 +34,6 @@
         );
 
         const data = response.data;
-        console.log(data);
         document.getElementById(
           "status"
         ).textContent = `Payment Status ${data.status}`;

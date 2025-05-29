@@ -4,9 +4,9 @@ const { User } = require("../../models/index.js");
 module.exports.isLoggedIn = async (req, res, next) => {
   try {
     if (!req.headers.authorization) {
-      console.log("Token not provided");
-      return;
+      return res.status(403).json({ error: "Not authorized" });
     }
+    
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = await verify(token);
 

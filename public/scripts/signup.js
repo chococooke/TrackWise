@@ -15,8 +15,6 @@ async function handleFormSubmit(event) {
       body
     );
 
-    console.log(response);
-
     if ("error" in response.data) {
       window.alert(response.data.error);
     } else {

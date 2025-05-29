@@ -92,7 +92,6 @@ module.exports.initResetPassword = async (req, res) => {
   try {
     const { email } = req.body;
     const resetLink = await createResetLink(email);
-    console.log(resetLink);
     if (resetLink.error) {
       console.log(error);
       res.status(404).json(resetLink);
@@ -120,11 +119,10 @@ module.exports.resetPassword = async (req, res) => {
     const result = await resetPassword(token, id, password);
 
     if (result.error) {
-      console.log(result);
       return res.status(403).json({ error: result.error });
     }
 
-    res.status(200).json({ result });
+    res.status(200).json(result);
   } catch (err) {
     console.log(err);
   }

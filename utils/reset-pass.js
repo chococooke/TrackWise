@@ -32,14 +32,12 @@ async function createResetLink(email) {
 }
 
 async function resetPassword(token, id, password) {
-  console.log(token, id, password);
   try {
     const user = await User.findOne({
       where: {
         id: id,
       },
     });
-    console.log(user);
     if (!user) {
       return { error: "Link not valid" };
     }
@@ -54,7 +52,7 @@ async function resetPassword(token, id, password) {
       return { error: "Link not valid" };
     }
 
-    user.password = bcrypt.hash(password, 10);
+    user.password = await bcrypt.hash(password, 10);
     user.resetPasswordToken = "null";
     user.resetPasswordExpires = Date.now();
     await user.save();

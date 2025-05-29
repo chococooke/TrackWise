@@ -5,9 +5,13 @@ const expenseForm = document.getElementById("expense-form");
 const logoutButton = document.getElementById("logout");
 const expensesDiv = document.getElementById("expensesList");
 const ldBoardDiv = document.getElementById("ldboard");
-
 const viewMain = document.getElementById("main-view");
 const viewLeaderboard = document.getElementById("leaderboard-view");
+
+let currentExpensesPage = 1;
+let currentLeaderboardPage = 1;
+const expensesPerPage = 10;
+const leaderboardPerPage = 15;
 
 viewMain.addEventListener("click", (event) => {
   expensesDiv.style.display = "";
@@ -19,19 +23,25 @@ viewLeaderboard.addEventListener("click", (event) => {
   ldBoardDiv.style.display = "";
 });
 
-// Load all content when page loads.
 document.addEventListener("DOMContentLoaded", async (event) => {
   ldBoardDiv.style.display = "none";
   const title = document.getElementById("title");
-  const rawUser = await localStorage.getItem("user");
+  const rawUser = localStorage.getItem("user");
 
-  if (!rawUser && !twToken) {
+  if (!rawUser) {
     alert("You need to log in first.");
     window.location.href = "http://localhost:5000/auth/login";
+    return;
   }
 
-  user = await JSON.parse(rawUser);
+  user = JSON.parse(rawUser);
   twToken = user.twToken;
+  if (!twToken) {
+    alert("Invalid session. Please log in again.");
+    window.location.href = "http://localhost:5000/auth/login";
+    return;
+  }
+
   title.innerHTML = `TrackWise - ${user.username}`;
   const userAvatar = document.getElementById("avatar");
   userAvatar.querySelector("p").innerHTML = user.username;
@@ -41,42 +51,63 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     ldBoardDiv.style.display = "none";
   } else {
     document.getElementById("premium-cta-wrapper").style.display = "none";
+    await fetchLeaderboard(currentLeaderboardPage);
   }
-  const leaderboard = (
-    await axios.get("http://localhost:5000/users/leaderboard", {
-      headers: {
-        Authorization: `Bearer ${twToken}`,
-        "Content-Type": "application/json",
-      },
-    })
-  ).data;
 
-
-  localStorage.setItem("ldboard", JSON.stringify(leaderboard));
-
-  await getUserExpenses();
+  await getUserExpenses(currentExpensesPage);
   await renderExpenses();
-  await renderLeaderboard();
 });
 
-// get current users's expenses
-async function getUserExpenses() {
+async function getUserExpenses(page = 1) {
   try {
-    const expenses = (
-      await axios.get(`http://localhost:5000/exp/${user.id}`, {
+    const response = await axios.get(
+      `http://localhost:5000/exp/${user.id}?page=${page}&limit=${expensesPerPage}`,
+      {
         headers: {
           Authorization: `Bearer ${twToken}`,
           "Content-Type": "application/json",
         },
-      })
-    ).data.exp;
-    localStorage.setItem("expenseList", JSON.stringify(expenses));
+      }
+    );
+    localStorage.setItem("expenseList", JSON.stringify(response.data.data));
+    localStorage.setItem(
+      "expensesPagination",
+      JSON.stringify(response.data.pagination)
+    );
+    currentExpensesPage = page;
   } catch (err) {
-    console.err(err);
+    console.error("Fetch expenses error:", err);
+    expensesDiv.innerHTML =
+      '<p class="error-state">Error loading expenses.</p>';
   }
 }
 
-// Expense addition after form submission.
+async function fetchLeaderboard(page = 1) {
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/users/leaderboard?page=${page}&limit=${leaderboardPerPage}`,
+      {
+        headers: {
+          Authorization: `Bearer ${twToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    
+    localStorage.setItem("ldboard", JSON.stringify(response.data.data));
+    localStorage.setItem(
+      "leaderboardPagination",
+      JSON.stringify(response.data.pagination)
+    );
+    currentLeaderboardPage = page;
+    await renderLeaderboard();
+  } catch (err) {
+    console.error("Leaderboard fetch error:", err);
+    ldBoardDiv.innerHTML =
+      '<p class="error-state">Error loading leaderboard.</p>';
+  }
+}
+
 expenseForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   try {
@@ -86,12 +117,7 @@ expenseForm.addEventListener("submit", async (event) => {
     ).value;
     let category = expenseForm.querySelector("select").value;
 
-    const formData = {
-      UserId: user.id,
-      amount,
-      description,
-      category,
-    };
+    const formData = { UserId: user.id, amount, description, category };
     await axios.post("http://localhost:5000/exp", formData, {
       headers: {
         Authorization: `Bearer ${twToken}`,
@@ -100,91 +126,96 @@ expenseForm.addEventListener("submit", async (event) => {
     });
 
     expenseForm.reset();
-
-    await getUserExpenses();
+    await getUserExpenses(currentExpensesPage);
     await renderExpenses();
   } catch (err) {
-    console.error(err);
+    console.error("Expense submission error:", err);
+    alert("Failed to add expense.");
   }
 });
 
 async function renderExpenses() {
   try {
     const expenseList = JSON.parse(localStorage.getItem("expenseList")) || [];
+    const pagination = JSON.parse(
+      localStorage.getItem("expensesPagination")
+    ) || {
+      page: 1,
+      totalPages: 1,
+    };
 
     expensesDiv.innerHTML = "";
 
     if (!Array.isArray(expenseList) || expenseList.length === 0) {
       expensesDiv.innerHTML = '<p class="empty-state">No expenses yet.</p>';
-      return;
+    } else {
+      expenseList.forEach((expense, index) => {
+        const expenseCard = document.createElement("div");
+        expenseCard.className = "expense-card";
+        expenseCard.dataset.id = expense.id || index;
+
+        const amount = document.createElement("h3");
+        amount.className = "expense-amount";
+        amount.innerHTML = `<span class="currency">₹</span>${Number(
+          expense.amount
+        ).toFixed(2)}`;
+
+        const description = document.createElement("p");
+        description.className = "expense-description";
+        description.innerText = expense.description || "No description";
+
+        const category = document.createElement("small");
+        category.className = "expense-category";
+        category.innerText = expense.category || "Uncategorized";
+
+        const actions = document.createElement("div");
+        actions.className = "expense-actions";
+
+        const editButton = document.createElement("button");
+        editButton.className = "action-button edit-button";
+        editButton.innerText = "Edit";
+        editButton.addEventListener("click", () =>
+          console.log(`Edit expense ${expense.id || index}`)
+        );
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "action-button delete-button";
+        deleteButton.innerText = "Delete";
+        deleteButton.addEventListener("click", async () => {
+          try {
+            const response = await axios.delete(
+              `http://localhost:5000/exp/delete/${expense.id}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${twToken}`,
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (!response.data.success) {
+              alert("Error while deleting expense");
+            }
+
+            await getUserExpenses(currentExpensesPage);
+            await renderExpenses();
+          } catch (err) {
+            console.error("Delete expense error:", err);
+            alert("Error while deleting expense");
+          }
+        });
+
+        actions.appendChild(editButton);
+        actions.appendChild(deleteButton);
+        expenseCard.appendChild(amount);
+        expenseCard.appendChild(description);
+        expenseCard.appendChild(category);
+        expenseCard.appendChild(actions);
+        expensesDiv.appendChild(expenseCard);
+      });
     }
 
-    expenseList.forEach((expense, index) => {
-      const expenseCard = document.createElement("div");
-      expenseCard.className = "expense-card";
-      expenseCard.dataset.id = expense.id || index; // Add data-id for future interactions
-
-      const amount = document.createElement("h3");
-      amount.className = "expense-amount";
-      amount.innerHTML = `<span class="currency">₹</span>${Number(
-        expense.amount
-      ).toFixed(2)}`;
-
-      const description = document.createElement("p");
-      description.className = "expense-description";
-      description.innerText = expense.description || "No description";
-
-      const category = document.createElement("small");
-      category.className = "expense-category";
-      category.innerText = expense.category || "Uncategorized";
-
-      const actions = document.createElement("div");
-      actions.className = "expense-actions";
-
-      const editButton = document.createElement("button");
-      editButton.className = "action-button edit-button";
-      editButton.innerText = "Edit";
-      editButton.addEventListener("click", () =>
-        console.log(`Edit expense ${expense.id || index}`)
-      );
-
-      const deleteButton = document.createElement("button");
-      deleteButton.className = "action-button delete-button";
-      deleteButton.innerText = "Delete";
-      deleteButton.addEventListener("click", async (event) => {
-        try {
-          const response = await axios.delete(
-            `http://localhost:5000/exp/delete/${expense.id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${twToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          if (!response.data.success) {
-            window.alert("Error while deleting expense");
-          }
-
-          await getUserExpenses();
-          await renderExpenses();
-        } catch (err) {
-          console.error(err);
-          window.alert("Error while deleting expense");
-        }
-      });
-
-      actions.appendChild(editButton);
-      actions.appendChild(deleteButton);
-
-      expenseCard.appendChild(amount);
-      expenseCard.appendChild(description);
-      expenseCard.appendChild(category);
-      expenseCard.appendChild(actions);
-
-      expensesDiv.appendChild(expenseCard);
-    });
+    renderPagination("expensesList", pagination, getUserExpenses);
   } catch (err) {
     console.error("Render expenses error:", err);
     expensesDiv.innerHTML =
@@ -192,58 +223,93 @@ async function renderExpenses() {
   }
 }
 
-// -------------------------------------------------------------------
-// -------------------------------------------------------------------
-
 async function renderLeaderboard() {
   try {
-    let ldboard = JSON.parse(localStorage.getItem("ldboard")) || [];
-
-    if (!Array.isArray(ldboard)) {
-      ldboard = Object.entries(ldboard).map(([username, exp]) => ({
-        username,
-        exp: Number(exp),
-      }));
-    }
-
-    ldboard.sort((a, b) => b.exp - a.exp);
+    const ldboard = JSON.parse(localStorage.getItem("ldboard")) || [];
+    const pagination = JSON.parse(
+      localStorage.getItem("leaderboardPagination")
+    ) || {
+      page: 1,
+      totalPages: 1,
+    };
 
     ldBoardDiv.innerHTML = "<h3>Leaderboard</h3>";
 
-    if (ldboard.length === 0) {
-      ldBoardDiv.innerHTML += "<p>No entries yet.</p>";
-      return;
+    if (!Array.isArray(ldboard) || ldboard.length === 0) {
+      ldBoardDiv.innerHTML += '<p class="empty-state">No entries yet.</p>';
+    } else {
+      ldboard.forEach((entry, index) => {
+        const entryDiv = document.createElement("div");
+        entryDiv.className = `leaderboard-entry rank-${index + 1}`;
+
+        const rankSpan = document.createElement("span");
+        rankSpan.className = "rank";
+        rankSpan.innerText = `${index + 1}.`;
+
+        const usernameSpan = document.createElement("span");
+        usernameSpan.className = "username";
+        usernameSpan.innerText = entry.username;
+
+        const expenseSpan = document.createElement("span");
+        expenseSpan.className = "expense";
+        expenseSpan.innerText = `₹${entry.exp.toFixed(2)}`;
+
+        entryDiv.appendChild(rankSpan);
+        entryDiv.appendChild(usernameSpan);
+        entryDiv.appendChild(expenseSpan);
+
+        ldBoardDiv.appendChild(entryDiv);
+      });
     }
 
-    ldboard.forEach((entry, index) => {
-      const entryDiv = document.createElement("div");
-      entryDiv.className = `leaderboard-entry rank-${index + 1}`;
-
-      const rankSpan = document.createElement("span");
-      rankSpan.className = "rank";
-      rankSpan.innerText = `${index + 1}.`;
-
-      const usernameSpan = document.createElement("span");
-      usernameSpan.className = "username";
-      usernameSpan.innerText = entry.username;
-
-      const expenseSpan = document.createElement("span");
-      expenseSpan.className = "expense";
-      expenseSpan.innerText = `₹${entry.exp.toFixed(2)}`;
-
-      entryDiv.appendChild(rankSpan);
-      entryDiv.appendChild(usernameSpan);
-      entryDiv.appendChild(expenseSpan);
-
-      ldBoardDiv.appendChild(entryDiv);
-    });
+    renderPagination("ldboard", pagination, fetchLeaderboard);
   } catch (err) {
     console.error("Leaderboard render error:", err);
-    ldBoardDiv.innerHTML = "<p>Error loading leaderboard.</p>";
+    ldBoardDiv.innerHTML =
+      '<p class="error-state">Error loading leaderboard.</p>';
   }
 }
 
-// Payment
+function renderPagination(containerId, pagination, fetchFunction) {
+  const container = document.getElementById(containerId);
+  const paginationDiv = document.createElement("div");
+  paginationDiv.className = "pagination-controls";
+
+  const prevButton = document.createElement("button");
+  prevButton.innerText = "Previous";
+  prevButton.disabled = pagination.page === 1;
+  prevButton.addEventListener("click", async (event) => {
+    console.log(event);
+    if (pagination.page > 1) {
+      await fetchFunction(pagination.page - 1);
+      renderExpenses();
+    }
+  });
+
+  const pageInfo = document.createElement("span");
+  pageInfo.innerText = `Page ${pagination.page} of ${pagination.totalPages}`;
+
+  const nextButton = document.createElement("button");
+  nextButton.innerText = "Next";
+  nextButton.disabled = pagination.page === pagination.totalPages;
+  nextButton.addEventListener("click", async (event) => {
+    console.log(event);
+    if (pagination.page < pagination.totalPages) {
+      await fetchFunction(pagination.page + 1);
+      renderExpenses();
+    }
+  });
+
+  paginationDiv.appendChild(prevButton);
+  paginationDiv.appendChild(pageInfo);
+  paginationDiv.appendChild(nextButton);
+
+  const existingPagination = container.querySelector(".pagination-controls");
+  if (existingPagination) existingPagination.remove();
+
+  container.appendChild(paginationDiv);
+}
+
 const cashFree = Cashfree({ mode: "sandbox" });
 
 premiumCta.addEventListener("click", async (event) => {
@@ -275,16 +341,17 @@ premiumCta.addEventListener("click", async (event) => {
 
     cashFree.checkout(checkoutOptions);
   } catch (err) {
-    console.error(`Error:`, err);
-    alert(`Payment initiation failed`);
+    console.error("Payment error:", err);
+    alert("Payment initiation failed");
   }
 });
 
-// Log out.
 async function logOut(event) {
-  await localStorage.removeItem("user");
-  await localStorage.removeItem("expenseList");
-  await localStorage.removeItem("ldboard");
+  localStorage.removeItem("user");
+  localStorage.removeItem("expenseList");
+  localStorage.removeItem("ldboard");
+  localStorage.removeItem("expensesPagination");
+  localStorage.removeItem("leaderboardPagination");
   window.location.href = "http://localhost:5000/auth/login";
 }
 

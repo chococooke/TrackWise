@@ -9,19 +9,37 @@ const addExpense = async (req, res) => {
   }
 };
 
-const getExpensesForUser = async (req, res) => {
+const getUserExpenses = async (req, res) => {
   try {
-    const expenses = await Expense.findAll({
+    const { page = 1, limit = 10 } = req.query;
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+
+    if (isNaN(pageNum) || isNaN(limitNum) || pageNum < 1 || limitNum < 0) {
+      return res.status(400).json({ error: "Invalid page or limit" });
+    }
+
+    const offset = (pageNum - 1) * limitNum;
+
+    const { count, rows } = await Expense.findAndCountAll({
       where: {
         UserId: req.params.id,
       },
+      order: [["createdAt", "DESC"]],
+      limit: limitNum,
+      offset: offset,
     });
 
-    if (expenses.length !== 0) {
-      res.status(200).json({ exp: expenses });
-    } else {
-      res.status(200).json({ exp: [] });
-    }
+    res.json({
+      success: true,
+      data: rows,
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total: count,
+        totalPages: Math.ceil(count / limitNum),
+      },
+    });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: "internal server error" });
@@ -43,4 +61,4 @@ const deleteExpense = async (req, res) => {
   }
 };
 
-module.exports = { addExpense, getExpensesForUser, deleteExpense };
+module.exports = { addExpense, getUserExpenses, deleteExpense };

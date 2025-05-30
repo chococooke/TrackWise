@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require("fs");
 const cors = require("cors");
 const authRouter = require("./routes/auth.js");
 const expenseRouter = require("./routes/expense.js");
@@ -7,13 +8,19 @@ const paymentRouter = require("./routes/payment.js");
 const reportRouter = require("./routes/report.js");
 const sequelize = require("./config/dbInit.js");
 const dotenv = require("dotenv");
+const morgan = require("morgan");
+const path = require("path");
 
 dotenv.config();
+
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" }
+);
 
 (async () => {
   try {
     await sequelize.authenticate();
-    await sequelize.sync();
     console.log("[+] MySQL connected");
   } catch (err) {
     console.log(err);
@@ -33,6 +40,7 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+app.use(morgan("combined", { stream: accessLogStream }));
 app.use("/api/auth", authRouter);
 app.use("/exp", expenseRouter);
 app.use("/users", userRouter);
@@ -62,8 +70,8 @@ app.get("/app/report", (req, res) => {
 });
 
 app.get("/app/download-report", (req, res) => {
-  res.sendFile(`${__dirname}/public/report-download.html`)
-})
+  res.sendFile(`${__dirname}/public/report-download.html`);
+});
 
 app.get("/auth/init-reset-password", (req, res) => {
   res.sendFile(`${__dirname}/public/init-reset-password.html`);

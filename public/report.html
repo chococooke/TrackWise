@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Report</title>
+
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+      body {
+        font-family: "Noto Sans", sans-serif;
+        background-color: #f5f5dc;
+        padding: 2rem;
+        margin: 0;
+      }
+      a {
+        color: white;
+      }
+
+      #report-form {
+        height: 8vh;
+        position: fixed;
+        width: 100%;
+        left: 0;
+        top: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #fff;
+        padding: 1rem;
+      }
+
+      label {
+        font-weight: 600;
+      }
+
+      select,
+      button,
+      input[type="checkbox"] {
+        padding: 0.4rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+      }
+
+      button[type="submit"] {
+        /* background-color: #007bff;
+        color: #fff; */
+        /* border: none; */
+        cursor: pointer;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #333;
+      }
+
+      #report-view {
+        margin-top: 10vh;
+      }
+
+      #report-view > button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 0.6rem 1rem;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-bottom: 1rem;
+      }
+
+      #report-view > button:hover {
+        background-color: #218838;
+      }
+
+      #report-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        background-color: #fff;
+      }
+
+      #report-table th,
+      #report-table td {
+        border: 1px solid #ddd;
+        padding: 0.75rem;
+        text-align: left;
+      }
+
+      #report-table th {
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="report-form">
+      <h1 id="report-form-branding">
+        <a style="color: inherit;" href="http://localhost:5000/app">TrackWise</a>
+      </h1>
+      <div id="report-form-form">
+        <label for="report-duration-select">Duration</label>
+        <select name="form-report-duration" id="report-duration-select">
+          <option value="1">Month</option>
+          <option value="2">Year</option>
+        </select>
+
+        <label for="report-month">Month:</label>
+        <select name="report-month" id="report-month">
+          <option value="null">Select</option>
+          <option value="01">January</option>
+          <option value="02">February</option>
+          <option value="03">March</option>
+          <option value="04">April</option>
+          <option value="05">May</option>
+          <option value="06">June</option>
+          <option value="07">July</option>
+          <option value="08">August</option>
+          <option value="09">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+
+        <label for="form-select-year">Select Year:</label>
+        <select id="form-select-year">
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+        </select>
+        <button type="submit">Get Report</button>
+      </div>
+    </form>
+
+    <div id="report-view">
+      <button id="download-report-btn">
+        <a href="http://localhost:5000/app/download-report">Download Report</a>
+      </button>
+      <table id="report-table">
+        <thead>
+          <tr id="header-row">
+            <th>Amount</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <footer>
+      made with ❤️ by <a href="https://github.com/chococooke">chococooke</a>
+    </footer>
+  </body>
+  <script src="/scripts/report.js"></script>
+</html>

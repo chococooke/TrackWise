@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Report</title>
+
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+      body {
+        font-family: "Noto Sans", sans-serif;
+        background-color: white;
+        padding: 2rem;
+        margin: 0;
+      }
+
+      a {
+        color: white;
+      }
+
+      #report {
+        padding: 2rem 0;
+      }
+
+      #report-view {
+        margin-top: 8vh;
+      }
+
+      #report-view > button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 0.6rem 1rem;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-bottom: 1rem;
+      }
+
+      #report-view > button:hover {
+        background-color: #218838;
+      }
+
+      #report-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        background-color: #fff;
+      }
+
+      #report-table th,
+      #report-table td {
+        border: 1px solid grey;
+        padding: 0.2rem 0.75rem;
+        text-align: left;
+      }
+
+      #report-table th {
+        background-color: #f0f0f0;
+      }
+
+      .report-actions {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 2rem;
+        background-color: beige;
+        height: 8vh;
+        border-bottom: 1px solid lightgrey;
+      }
+
+      .report-actions > div > button:first-child {
+        background-color: #218838;
+      }
+
+      h3 {
+        width: 100%;
+        text-align: center;
+      }
+
+      footer {
+        background-color: beige;
+      }
+
+      @media print {
+        button,
+        footer,
+        .report-actions {
+          display: none;
+        }
+        tr:nth-child(even) {
+          background-color: black;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="report-view">
+      <div class="report-actions">
+        <div class="report-branding">
+          <h1>TrackWise</h1>
+        </div>
+        <div class="report-action-buttons">
+          <button id="download-report-btn">Download Report</button>
+          <button id="home"><a href="http://localhost:5000/app">Home</a></button>
+        </div>
+      </div>
+
+      <div id="report">
+        <h3 id="report-heading">Report of your expenses on TrackWise</h3>
+        <table id="report-table">
+          <thead>
+            <tr id="header-row">
+              <th>Amount</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <footer>Made with ❤️ by <a href="https://github.com">chococooke</a></footer>
+  </body>
+  <script src="/scripts/report.js"></script>
+  <script>
+    const dlBtn = document.getElementById("download-report-btn");
+    dlBtn.addEventListener("click", (event) => {
+      window.print();
+    });
+  </script>
+</html>

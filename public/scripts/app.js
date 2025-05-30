@@ -7,11 +7,16 @@ const expensesDiv = document.getElementById("expensesList");
 const ldBoardDiv = document.getElementById("ldboard");
 const viewMain = document.getElementById("main-view");
 const viewLeaderboard = document.getElementById("leaderboard-view");
+const reportBtn = document.getElementById("report-btn");
 
 let currentExpensesPage = 1;
 let currentLeaderboardPage = 1;
 const expensesPerPage = 10;
 const leaderboardPerPage = 15;
+
+reportBtn.addEventListener("click", (event) => {
+  window.location.href = "http://localhost:5000/app/report";
+});
 
 viewMain.addEventListener("click", (event) => {
   expensesDiv.style.display = "";
@@ -49,8 +54,10 @@ document.addEventListener("DOMContentLoaded", async (event) => {
   if (user.premium === false) {
     viewLeaderboard.style.display = "none";
     ldBoardDiv.style.display = "none";
+    reportBtn.style.display = "none";
   } else {
     document.getElementById("premium-cta-wrapper").style.display = "none";
+    reportBtn.style.display = "";
     await fetchLeaderboard(currentLeaderboardPage);
   }
 
@@ -93,7 +100,7 @@ async function fetchLeaderboard(page = 1) {
         },
       }
     );
-    
+
     localStorage.setItem("ldboard", JSON.stringify(response.data.data));
     localStorage.setItem(
       "leaderboardPagination",
@@ -352,6 +359,7 @@ async function logOut(event) {
   localStorage.removeItem("ldboard");
   localStorage.removeItem("expensesPagination");
   localStorage.removeItem("leaderboardPagination");
+  localStorage.removeItem("twReport");
   window.location.href = "http://localhost:5000/auth/login";
 }
 

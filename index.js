@@ -4,6 +4,7 @@ const authRouter = require("./routes/auth.js");
 const expenseRouter = require("./routes/expense.js");
 const userRouter = require("./routes/user.js");
 const paymentRouter = require("./routes/payment.js");
+const reportRouter = require("./routes/report.js");
 const sequelize = require("./config/dbInit.js");
 const dotenv = require("dotenv");
 
@@ -36,6 +37,7 @@ app.use("/api/auth", authRouter);
 app.use("/exp", expenseRouter);
 app.use("/users", userRouter);
 app.use("/api/payment", paymentRouter);
+app.use("/api/report", reportRouter);
 
 app.use(express.static("public"));
 
@@ -54,6 +56,14 @@ app.get("/auth/signup", (req, res) => {
 app.get("/auth/login", (req, res) => {
   res.sendFile(`${__dirname}/public/login.html`);
 });
+
+app.get("/app/report", (req, res) => {
+  res.sendFile(`${__dirname}/public/report.html`);
+});
+
+app.get("/app/download-report", (req, res) => {
+  res.sendFile(`${__dirname}/public/report-download.html`)
+})
 
 app.get("/auth/init-reset-password", (req, res) => {
   res.sendFile(`${__dirname}/public/init-reset-password.html`);

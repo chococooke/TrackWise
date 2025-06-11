@@ -8,7 +8,7 @@
 
 a {
   text-decoration: none;
-  color: teal;
+  color: #2c6e49; /* Replaced teal with a sophisticated green */
 }
 
 button {
@@ -16,8 +16,8 @@ button {
   border-radius: 10px;
   border: none;
   font-weight: bolder;
-  background-color: #333;
-  color: white;
+  background-color: #374151; /* Replaced #333 with a refined gray */
+  color: #f9fafb; /* Replaced white with a soft off-white */
   transition: all 0.3s ease;
 }
 
@@ -27,13 +27,13 @@ button:hover {
 }
 
 body {
-  background-color: beige;
+  background-color: #f5f5f4; /* Replaced beige with a neutral off-white */
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .header {
-  background-color: white;
+  background-color: #ffffff; /* Kept white for clean look */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -43,7 +43,7 @@ body {
   top: 0;
   left: 0;
   height: 10vh;
-  border-bottom: 1px solid lightgrey;
+  border-bottom: 1px solid #d1d5db; /* Replaced lightgrey with a subtle gray */
 }
 
 .header-links > ul {
@@ -53,26 +53,26 @@ body {
   align-items: center;
 }
 
-.header-links > ul > li{
+.header-links > ul > li {
   margin-right: 0.6rem;
 }
 
 #premium-cta-wrapper {
   padding: 0.2rem;
   border-radius: 10px;
-  background-image: linear-gradient(to bottom right, pink, yellow, turquoise);
+  background-image: linear-gradient(to bottom right, #f9a8d4, #fef08a, #5eead4); /* Replaced pink, yellow, turquoise with softer, elegant tones */
   margin: 0 0.6rem;
   transition: all 0.3s ease;
 }
 
-.premium-cta-wrapper:hover {
-  box-shadow: 0 0 10px turquoise;
+#premium-cta-wrapper:hover {
+  box-shadow: 0 0 10px #5eead4; /* Matched hover shadow to gradient */
   transform: translateY(-4px);
 }
 
 #avatar {
   margin: 0 0.4rem;
-  border: 1px solid white;
+  border: 1px solid #ffffff; /* Kept white for consistency */
   border-radius: 10px;
   display: flex;
   flex-direction: row;
@@ -85,12 +85,12 @@ body {
   height: 1.6rem;
   width: 1.6rem;
   border-radius: 100%;
-  background-color: red;
+  background-color: #dc2626; /* Replaced red with a deeper, classier red */
   margin-right: 1rem;
 }
 
 #logout:hover {
-  background-color: red;
+  background-color: #b91c1c; /* Matched logout hover to deeper red */
 }
 
 /* main */
@@ -117,9 +117,9 @@ body {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  box-shadow: 2px 2px 6px lightgrey;
+  box-shadow: 2px 2px 6px #d1d5db; /* Replaced lightgrey with subtle gray */
   border-radius: 10px;
-  background-color: white;
+  background-color: #ffffff; /* Kept white for clean look */
 }
 
 #expense-form > * {
@@ -128,23 +128,20 @@ body {
 }
 
 #expense-form > input {
-  /* margin: 30px auto; */
   height: 3rem;
   padding: 0.6rem;
-  border: 0.1rem solid lightgrey;
+  border: 0.1rem solid #d1d5db; /* Replaced lightgrey with subtle gray */
   border-radius: 10px;
   outline: none;
 }
 
 input:active {
-  border: 1px solid green;
+  border: 1px solid #15803d; /* Replaced green with a classier green */
 }
 
 #expense-form > textarea {
-  /* margin: 30px auto; */
-  /* height: 3rem; */
   padding: 0.6rem;
-  border: 0.1rem solid lightgray;
+  border: 0.1rem solid #d1d5db; /* Replaced lightgray with subtle gray */
   border-radius: 10px;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
@@ -164,19 +161,19 @@ input:active {
 
 #expense-form-select {
   height: 20px;
-  background-color: blue;
+  background-color: #1e40af; /* Replaced blue with a refined navy */
 }
 
 /* -------------------------- */
 #expenses {
   margin: 0 auto;
-  background-color: white;
+  background-color: #ffffff; /* Kept white for clean look */
   width: 75%;
   height: 100%;
   overflow-y: scroll;
   padding: 1rem;
   border-radius: 10px;
-  box-shadow: 2px 2px 10px lightgrey;
+  box-shadow: 2px 2px 10px #d1d5db; /* Replaced lightgrey with subtle gray */
 }
 
 .expenses-tabs {
@@ -193,8 +190,8 @@ input:active {
 
 #tab-expenses,
 #tab-leaderboard {
-  background-color: lightgrey;
-  color: gray;
+  background-color: #e5e7eb; /* Replaced lightgrey with a softer gray */
+  color: #6b7280; /* Replaced gray with a neutral gray */
   transition: none;
 }
 
@@ -204,17 +201,15 @@ input:active {
 }
 
 #tab-expenses-active,
-#tab-leaderboard-avtive {
-  background-color: #333;
-  color: white;
+#tab-leaderboard-active {
+  background-color: #374151; /* Matched active tabs to button color */
+  color: #f9fafb; /* Matched to off-white */
 }
 
 #tab-expenses-active:hover,
 #tab-leaderboard-active:hover {
   transform: none;
 }
-
-/* Previous style.css content omitted, replace .expense-card and add new rules */
 
 .expense-card {
   display: flex;
@@ -223,10 +218,10 @@ input:active {
   justify-content: space-between;
   margin: 1rem;
   padding: 1rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #d1d5db; /* Replaced #e0e0e0 with subtle gray */
   border-radius: 10px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-  background-color: white;
+  background-color: #ffffff; /* Kept white for clean look */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -239,20 +234,20 @@ input:active {
   flex: 0 0 25%;
   font-size: 1.25rem;
   font-weight: 500;
-  color: #333;
+  color: #374151; /* Replaced #333 with refined gray */
   display: flex;
   align-items: center;
 }
 
 .expense-amount .currency {
-  color: #218838;
+  color: #15803d; /* Replaced #218838 with classier green */
   margin-right: 0.25rem;
 }
 
 .expense-description {
   flex: 0 0 35%;
   font-size: 0.875rem;
-  color: #666;
+  color: #6b7280; /* Replaced #666 with neutral gray */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -261,7 +256,7 @@ input:active {
 .expense-category {
   flex: 0 0 20%;
   font-size: 0.75rem;
-  color: #999;
+  color: #9ca3af; /* Replaced #999 with softer gray */
   text-transform: capitalize;
 }
 
@@ -283,22 +278,22 @@ input:active {
 }
 
 .edit-button {
-  background-color: #218838;
-  color: white;
+  background-color: #15803d; /* Replaced #218838 with classier green */
+  color: #f9fafb; /* Matched to off-white */
 }
 
 .edit-button:hover {
-  background-color: #1a6e2d;
+  background-color: #166534; /* Darkened green for hover */
   transform: translateY(-2px);
 }
 
 .delete-button {
-  background-color: #d32f2f;
-  color: white;
+  background-color: #b91c1c; /* Replaced #d32f2f with deeper red */
+  color: #f9fafb; /* Matched to off-white */
 }
 
 .delete-button:hover {
-  background-color: #b71c1c;
+  background-color: #991b1b; /* Darkened red for hover */
   transform: translateY(-2px);
 }
 
@@ -306,7 +301,7 @@ input:active {
 .error-state {
   text-align: center;
   font-size: 1rem;
-  color: #666;
+  color: #6b7280; /* Replaced #666 with neutral gray */
   padding: 1rem;
 }
 
@@ -353,12 +348,12 @@ footer {
   text-align: center;
   padding: 1rem;
   font-weight: bold;
-  border-top: 1px solid lightgrey;
-  background-color: white;
+  border-top: 1px solid #d1d5db; /* Replaced lightgrey with subtle gray */
+  background-color: #ffffff; /* Kept white for clean look */
 }
 
-footer > a{
-  color: #218838;
+footer > a {
+  color: #15803d; /* Replaced #218838 with classier green */
 }
 
 /* Custom styles for select tag */
@@ -366,16 +361,16 @@ footer > a{
   width: 100%;
   height: 3rem;
   padding: 0.6rem;
-  border: 0.1rem solid lightgrey;
+  border: 0.1rem solid #d1d5db; /* Replaced lightgrey with subtle gray */
   border-radius: 10px;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   font-size: 14px;
-  background-color: white;
+  background-color: #ffffff; /* Kept white for clean look */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); /* Matched stroke to button color */
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 12px;
@@ -385,7 +380,7 @@ footer > a{
 
 #expense-form select.expense-form-select:focus {
   outline: none;
-  border-color: #218838;
+  border-color: #15803d; /* Matched to classier green */
 }
 
 /* Authentication forms */
@@ -400,10 +395,10 @@ footer > a{
 
 #auth-form {
   border-radius: 10px;
-  box-shadow: 2px 2px 10px lightgrey;
+  box-shadow: 2px 2px 10px #d1d5db; /* Replaced lightgrey with subtle gray */
   height: 60vh;
   width: 40vw;
-  background-color: white;
+  background-color: #ffffff; /* Kept white for clean look */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -420,16 +415,16 @@ footer > a{
 }
 
 #auth-form > input {
-  border: 0.2rem solid lightgrey;
+  border: 0.2rem solid #d1d5db; /* Replaced lightgrey with subtle gray */
   transition: all 0.3s ease;
 }
 
 #auth-form > input:active {
-  border-color: #333;
+  border-color: #374151; /* Matched to button color */
 }
 
 #auth-form > small {
-  color: grey;
+  color: #6b7280; /* Replaced grey with neutral gray */
   font-size: 14px;
 }
 
@@ -449,12 +444,12 @@ footer > a{
 .auth-page-footer {
   background-color: transparent;
   border: none;
-  text-shadow: 0 0 4px lightgrey;
+  text-shadow: 0 0 4px #d1d5db; /* Replaced lightgrey with subtle gray */
 }
 
 /* Leaderboard styling */
 #ldBoardDiv {
-  background-color: white;
+  background-color: #ffffff; /* Kept white for clean look */
   width: 100%;
   max-width: 800px;
   margin: 1rem auto;
@@ -468,7 +463,7 @@ footer > a{
 #ldBoardDiv h3 {
   font-size: 1.5rem;
   font-weight: bolder;
-  color: #333;
+  color: #374151; /* Replaced #333 with refined gray */
   margin-bottom: 1rem;
   text-align: center;
 }
@@ -479,9 +474,9 @@ footer > a{
   align-items: center;
   padding: 0.75rem 1rem;
   margin: 0.5rem 0;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #d1d5db; /* Replaced #e0e0e0 with subtle gray */
   border-radius: 8px;
-  background-color: #fafafa;
+  background-color: #f9fafb; /* Replaced #fafafa with softer off-white */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -492,55 +487,53 @@ footer > a{
 
 .leaderboard-entry .rank {
   font-weight: bold;
-  color: #218838;
+  color: #15803d; /* Replaced #218838 with classier green */
   width: 10%;
 }
 
 .leaderboard-entry .username {
   font-weight: 500;
-  color: #333;
+  color: #374151; /* Replaced #333 with refined gray */
   flex: 1;
   text-align: left;
 }
 
 .leaderboard-entry .expense {
   font-weight: 500;
-  color: #666;
+  color: #6b7280; /* Replaced #666 with neutral gray */
   width: 20%;
   text-align: right;
 }
 
 .leaderboard-entry.rank-1 {
-  background-color: #fff8e1;
-  border-color: #ffc107;
+  background-color: #fef3c7; /* Replaced #fff8e1 with a softer gold */
+  border-color: #f59e0b; /* Replaced #ffc107 with a refined amber */
 }
 
 .leaderboard-entry.rank-1 .rank {
-  color: #ffc107;
+  color: #f59e0b; /* Matched to amber */
 }
 
 .leaderboard-entry.rank-2 {
-  background-color: #f5f5f5;
-  border-color: #bdbdbd;
+  background-color: #f3f4f6; /* Replaced #f5f5f5 with a softer gray */
+  border-color: #9ca3af; /* Replaced #bdbdbd with a neutral gray */
 }
 
 .leaderboard-entry.rank-2 .rank {
-  color: #bdbdbd;
+  color: #9ca3af; /* Matched to neutral gray */
 }
 
 .leaderboard-entry.rank-3 {
-  background-color: #f7f4f0;
-  border-color: #d7ccc8;
+  background-color: #f7f7f7; /* Replaced #f7f4f0 with a cleaner gray */
+  border-color: #d4d4d8; /* Replaced #d7ccc8 with a neutral gray */
 }
 
 .leaderboard-entry.rank-3 .rank {
-  color: #d7ccc8;
+  color: #d4d4d8; /* Matched to neutral gray */
 }
 
-/* -------------------------------------------------------- */
 /* Tablet screens (up to 1024px) */
 @media (max-width: 1024px) {
-  /* Header */
   .header {
     padding: 0 0.4rem;
     height: 8vh;
@@ -565,7 +558,6 @@ footer > a{
     margin-right: 0.8rem;
   }
 
-  /* Main Layout */
   .main {
     flex-direction: column;
     height: auto;
@@ -588,7 +580,6 @@ footer > a{
     margin: 0.5rem;
   }
 
-  /* Leaderboard */
   #ldBoardDiv {
     width: 90%;
     padding: 1.5rem;
@@ -607,7 +598,6 @@ footer > a{
     width: 25%;
   }
 
-  /* Authentication Form */
   #auth-form {
     width: 60vw;
     height: 50vh;
@@ -624,7 +614,6 @@ footer > a{
 
 /* Small tablets (up to 768px) */
 @media (max-width: 768px) {
-  /* Header */
   .header {
     flex-direction: column;
     height: auto;
@@ -652,7 +641,6 @@ footer > a{
     margin-right: 0.6rem;
   }
 
-  /* Main Layout */
   .main {
     padding: 0.5rem;
   }
@@ -692,7 +680,6 @@ footer > a{
     width: 100%;
   }
 
-  /* Leaderboard */
   #ldBoardDiv {
     width: 95%;
     padding: 1rem;
@@ -713,7 +700,6 @@ footer > a{
     text-align: left;
   }
 
-  /* Authentication Form */
   #auth-form {
     width: 80vw;
     height: 55vh;
@@ -740,7 +726,6 @@ footer > a{
 
 /* Mobile screens (up to 480px) */
 @media (max-width: 480px) {
-  /* Header */
   .header {
     padding: 0.3rem;
   }
@@ -769,7 +754,6 @@ footer > a{
     margin-right: 0.4rem;
   }
 
-  /* Main Layout */
   .main {
     margin-top: 12vh;
     padding: 0.3rem;
@@ -797,7 +781,6 @@ footer > a{
     padding: 0.3rem;
   }
 
-  /* Leaderboard */
   #ldBoardDiv {
     width: 100%;
     padding: 0.5rem;
@@ -821,7 +804,6 @@ footer > a{
     font-size: 0.8rem;
   }
 
-  /* Authentication Form */
   #auth-form {
     width: 90vw;
     height: 65vh;
@@ -845,7 +827,6 @@ footer > a{
     padding: 0.5rem;
   }
 
-  /* Footer */
   footer {
     padding: 0.5rem;
     font-size: 14px;
@@ -866,8 +847,8 @@ footer > a{
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 8px;
-  background-color: #218838;
-  color: white;
+  background-color: #15803d; /* Replaced #218838 with classier green */
+  color: #f9fafb; /* Matched to off-white */
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   font-size: 0.875rem;
@@ -876,18 +857,18 @@ footer > a{
 }
 
 .pagination-controls button:hover:not(:disabled) {
-  background-color: #1a6e2d;
+  background-color: #166534; /* Darkened green for hover */
   transform: translateY(-2px);
 }
 
 .pagination-controls button:disabled {
-  background-color: #ccc;
+  background-color: #d1d5db; /* Replaced #ccc with subtle gray */
   cursor: not-allowed;
 }
 
 .pagination-controls span {
   font-size: 0.875rem;
-  color: #333;
+  color: #374151; /* Replaced #333 with refined gray */
 }
 
 /* Responsive pagination controls */
@@ -946,22 +927,22 @@ table {
   text-align: left;
   width: 90%;
   margin: 0 auto;
-  background-color: white;
+  background-color: #ffffff; /* Kept white for clean look */
 }
 
 th,
 td {
-  border: 1px solid grey;
+  border: 1px solid #d1d5db; /* Replaced grey with subtle gray */
   text-align: left;
   padding: 0.5rem 1rem;
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
+  background-color: #e5e7eb; /* Replaced #dddddd with softer gray */
 }
 
 #report-form {
-  background-color: beige;
+  background-color: #f5f5f4; /* Matched body background */
   padding: 1rem;
   display: flex;
   flex-direction: row;
@@ -973,7 +954,7 @@ tr:nth-child(even) {
   margin: 0 auto;
   top: 0;
   left: 0;
-  border: 1px solid lightgrey;
+  border: 1px solid #d1d5db; /* Replaced lightgrey with subtle gray */
 }
 
 #report-form > * {
@@ -981,9 +962,8 @@ tr:nth-child(even) {
 }
 
 select {
-  /* height: 2rem; */
   text-align: center;
-  border: 1px solid #218838;
+  border: 1px solid #15803d; /* Replaced #218838 with classier green */
   border-radius: 10px;
   margin-right: 1rem;
 }
@@ -997,11 +977,11 @@ option {
 }
 
 th {
-  box-shadow: inset 0 -1px 2.5px grey;
+  box-shadow: inset 0 -1px 2.5px #d1d5db; /* Replaced grey with subtle gray */
 }
 
-@media  print {
+@media print {
   tr:nth-child(even) {
-    background-color: lightgrey;
-  }   
+    background-color: #e5e7eb; /* Matched to table even rows */
+  }
 }

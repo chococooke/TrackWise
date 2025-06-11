@@ -18,12 +18,23 @@ reportBtn.addEventListener("click", (event) => {
   window.location.href = "http://localhost:5000/app/report";
 });
 
+viewLeaderboard.style.backgroundColor = "lightgrey";
+viewLeaderboard.style.color = "black";
+
 viewMain.addEventListener("click", (event) => {
+  viewLeaderboard.style.backgroundColor = "lightgrey";
+  viewLeaderboard.style.color = "black";
+    viewMain.style.backgroundColor = "#333";
+  viewMain.style.color = 'white'
   expensesDiv.style.display = "";
   ldBoardDiv.style.display = "none";
 });
 
 viewLeaderboard.addEventListener("click", (event) => {
+  viewLeaderboard.style.backgroundColor = "#333";
+  viewLeaderboard.style.color = "white";
+  viewMain.style.backgroundColor = "lightgrey";
+  viewMain.style.color = 'black'
   expensesDiv.style.display = "none";
   ldBoardDiv.style.display = "";
 });

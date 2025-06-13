@@ -46,6 +46,21 @@ const getUserExpenses = async (req, res) => {
   }
 };
 
+const updateExpese = async (req, res) => {
+  try {
+    await Expense.update(req.body, {
+      where: {
+        id: req.params.id
+      }
+    })
+
+    res.status(200).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 const deleteExpense = async (req, res) => {
   try {
     await Expense.destroy({
@@ -61,4 +76,4 @@ const deleteExpense = async (req, res) => {
   }
 };
 
-module.exports = { addExpense, getUserExpenses, deleteExpense };
+module.exports = { addExpense, getUserExpenses, deleteExpense, updateExpese };

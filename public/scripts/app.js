@@ -24,8 +24,8 @@ viewLeaderboard.style.color = "black";
 viewMain.addEventListener("click", (event) => {
   viewLeaderboard.style.backgroundColor = "lightgrey";
   viewLeaderboard.style.color = "black";
-    viewMain.style.backgroundColor = "#333";
-  viewMain.style.color = 'white'
+  viewMain.style.backgroundColor = "#333";
+  viewMain.style.color = "white";
   expensesDiv.style.display = "";
   ldBoardDiv.style.display = "none";
 });
@@ -34,7 +34,7 @@ viewLeaderboard.addEventListener("click", (event) => {
   viewLeaderboard.style.backgroundColor = "#333";
   viewLeaderboard.style.color = "white";
   viewMain.style.backgroundColor = "lightgrey";
-  viewMain.style.color = 'black'
+  viewMain.style.color = "black";
   expensesDiv.style.display = "none";
   ldBoardDiv.style.display = "";
 });
@@ -153,8 +153,10 @@ expenseForm.addEventListener("submit", async (event) => {
 });
 
 async function renderExpenses() {
+  console.log("hello");
   try {
     const expenseList = JSON.parse(localStorage.getItem("expenseList")) || [];
+    console.log(expenseList[0]);
     const pagination = JSON.parse(
       localStorage.getItem("expensesPagination")
     ) || {
@@ -191,14 +193,88 @@ async function renderExpenses() {
 
         const editButton = document.createElement("button");
         editButton.className = "action-button edit-button";
+        editButton.setAttribute("key", index);
         editButton.innerText = "Edit";
-        editButton.addEventListener("click", () =>
-          console.log(`Edit expense ${expense.id || index}`)
-        );
 
         const deleteButton = document.createElement("button");
         deleteButton.className = "action-button delete-button";
         deleteButton.innerText = "Delete";
+
+        const editExpDiv = document.getElementById("edit-exp-div");
+        const editExpForm = document.getElementById("edit-exp-div-form");
+
+        const cancelEditButton = document.getElementById("cancel-edit-btn");
+        cancelEditButton.addEventListener(
+          "click",
+          () => (editExpDiv.style.display = "none")
+        );
+
+        editButton.addEventListener("click", async () => {
+          const formData = {
+            amount: "",
+            description: "",
+          };
+
+          const key = editButton.attributes["key"].value;
+          const expense = expenseList[parseInt(key, 10)];
+          const amountInput = document.getElementById("edit-form-amount");
+          amountInput.value = expense.amount;
+
+          const descriptionInput = document.getElementById(
+            "edit-form-description"
+          );
+          descriptionInput.value = expense.description;
+
+          amountInput.onchange = (event) =>
+            (formData.amount = event.target.value);
+
+          descriptionInput.onchange = (event) =>
+            (formData.description = event.target.value);
+
+          if (formData.amount === "") {
+            formData.amount = expense.amount;
+          }
+
+          if (formData.description === "") {
+            formData.description = expense.description;
+          }
+
+          editExpDiv.style.display = "flex";
+
+          editExpForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            console.log(formData);
+            try {
+              const response = await axios.put(
+                `http://localhost:5000/exp/update/${expense.id}`,
+                formData,
+                {
+                  headers: {
+                    Authorization: `Bearer ${twToken}`,
+                    "Content-Type": `application/json`,
+                  },
+                }
+              );
+
+              if (response.status !== 200) {
+                window.alert("Error while deleting expense");
+              } else {
+                window.alert("Updated successfully");
+                editExpDiv.style.display = "none";
+              }
+
+              console.log(response);
+
+              await getUserExpenses(currentExpensesPage);
+              await renderExpenses();
+            } catch (err) {
+              console.error(err);
+            }
+          });
+
+          console.log(expense);
+        });
+
         deleteButton.addEventListener("click", async () => {
           try {
             const response = await axios.delete(
